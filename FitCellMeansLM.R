@@ -9,20 +9,21 @@
 #it also assumes you have already loaded the packeges listed in PrepareData.R.
 
 #Step 1. create model matrix.-------
-design <- model.matrix(~0 + tissue) #Apologies! this is actually a model matrix. calling it 'design' is misleading.
-show(design) #this is optional.
+modelMat <- model.matrix(~0 + tissue)
+show(modelMat) #this is optional.
 
 #Step 2. Voom and Limma------------------
-dat.voomed <- voom(dat, design, plot = TRUE, lib.size = colSums(dat) * norm.factor) #this calculates more accurate variances
-fit <- lmFit(dat.voomed, design) #for each genes, this fits coefficients to observed cpm as described by design.
+dat.voomed <- voom(dat, modelMat, plot = TRUE, lib.size = colSums(dat) * norm.factor) #this calculates more accurate variances
+fit <- lmFit(dat.voomed, modelMat) #for each genes, this fits coefficients to observed cpm as described by design.
 fit <- eBayes(fit)
 
 #Step 3. topTabling the results-----------
 head(ttfitall <- topTable(fit, n = Inf))
 
 #Step 4. Play around with different comparisons--------------
-#by adjusting the coefficient numbers, you can look at just one coefficent (get t values)
+#by adjusting the coefficient numbers, you can look at just one coefficent (get t values) or
 #look at various combinations (getting F, **WHICH represents the likelihood that any coefficient is zero**)
+#for cell means, this is not a particularly helpful number! genes with high overall expression will give the highest F values.
 #p.values and adj.P.values (corrected for multiple hypothesis testing with with BH method) are always given.
 #I have no idea what B means right now (This column shows up when fitting just 1 coefficient)
 #the list is organized in order of ascending adj.P.
@@ -30,17 +31,17 @@ head(ttfitall <- topTable(fit, n = Inf))
 #so, put different numbers in the 'coef' option
 #and adjust the output table accordingly, ex:
 #NAMEofTT <- topTable(fit, coef = c(NUMBER,NUMBER,etc...), n = Inf)
-ttfit_c1 <- topTable(fit, coef = c(1), n = Inf)
+ttfit.c1 <- topTable(fit, coef = c(1), n = Inf)
 
 #use head() to look at just the top 6 lines
-head(ttfit_c2 <- topTable(fit, coef = c(2), n = Inf))
-head(ttfit_c23 <- topTable(fit, coef = c(2, 3), n = Inf))
-head(ttfit_c523 <- topTable(fit, coef = c(5, 2, 3), n = Inf))
+head(ttfit.c2 <- topTable(fit, coef = c(2), n = Inf))
+head(ttfit.c23 <- topTable(fit, coef = c(2, 3), n = Inf))
+head(ttfit.c523 <- topTable(fit, coef = c(5, 2, 3), n = Inf))
 
 #Step 5. get the list length you want -----------------
 #Ex:
-#ttfitall_trimmed <- topTable(fit, coef = c(2), n = PUT NUMBER OF LINES HERE)
-ttfitall_trimmed <- topTable(fit, coef = c(2), n = 1000)
+#trimmed_ttfit.c2 <- topTable(fit, coef = c(2), n = PUT NUMBER OF LINES HERE)
+trimmed_ttfit.c2 <- topTable(fit, coef = c(2), n = 1000)
 
 #Step 6. get a list of genes with the adj.P.Val cutoffs you want--------------
 cutoff <- 1e-5
