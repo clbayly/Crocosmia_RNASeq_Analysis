@@ -1,4 +1,5 @@
-#LINEAR MODELLING WITH CELL MEANS PARAMETERIZATION
+#LINEAR MODELLING WITH CELL MEANS PARAMETERIZATION-----------
+
 #This script assumes you have already prepared the following objects using PrepareData.R:
 #1. the log2cpm counts data matrix: dat
 #2. the factor: tissue
