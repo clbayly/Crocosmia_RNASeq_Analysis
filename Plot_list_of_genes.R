@@ -49,10 +49,13 @@ z$samples$lib.size <- colSums(z$counts)   #Resets the library size (adjusting fo
 dat <- z$counts                           #This takes your data out of the DGE list (I think)
 str(dat)
 
-#Step 8. Calculate the normalization factors for dat. This calculates 1 value per library, 
+#Step 8. Calculate the normalization factors for dat. This calculates 1 value per library,
+#and more details on what they actually do are in A_scaling_normalization_method_for_differential_expression_(TMM)
+#in the protocol package.
 norm.factor <- calcNormFactors(dat)
 
-#Step 9. Vooming dat, but for this script we only do it change from counts to logCpm values.------------
+#Step 9. Vooming dat, but for this script we only do it change from counts to log2cpm values.------------
+#NOTE: it actually performs this calculation: log2cpm = log2([counts + 0.5]*10e6 / [library+1])
 dat.voomed <- voom(dat, lib.size = colSums(dat) * norm.factor)
 head(dat.voomed$E) #this contains the log2(counts) expression data that gets plotted
 
