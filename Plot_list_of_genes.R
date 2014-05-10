@@ -45,6 +45,7 @@ str(dat)
 
 #Step 7. Remove genes in dat which have too little counts in all genes---------
 #(Making a DGElist pretty much so I can use Mac's code to trim)
+#NOTE: This removes a LOT of genes! but with such low counts across tissues, they will only add noise.
 y <- DGEList(counts=dat, group = tissue)  #this makes your data group into a DGE list. 
 z <- y[(rowSums(cpm(y) > 1) >= 3), ]      #this means: for a given gene (row), only keep rows which have at least 3 entries with >1 count. 
 z$samples$lib.size <- colSums(z$counts)   #this resets the library size (since you've now removed some rows)
@@ -81,9 +82,10 @@ plotManyGenes <- function(GENELIST, TITLE_OF_PLOT) {
 }
 
 #Step 11. plotOneGene is a function that plots a single gene------------------
-#NOTE: It differs from the above function in that it doesnt' transpose reDat when making cDat.
+#NOTE: It differs from the above function in that it doesnt' use cbind() to make a toplist
+# and it doesnt' transpose reDat when making cDat.
 #   toplist <- cbind(GENELIST)
-#  cDat <- cbind(des, t(reDat))
+#   cDat <- cbind(des, t(reDat))
 #NOTE: For now, if you want to change the plot scale, you must alter the line:
 #     scale_x_continuous(limits=c(-5, 13)) +
 #The -5 is what I have put for the minimum, and 13 is the max. you can change those as you need.
@@ -115,12 +117,13 @@ GENELIST <- c("comp103267_c0_seq1", "comp102969_c0_seq7","comp103431_c0_seq1",
 GENE <- "comp103267_c0_seq1"
 
 #ARE ALL YOUR GENES PRESENT IN THE MATRIX?-----
-#if they don't, the plotter won't work! If you 
-length(setdiff(GENELIST, rownames(dat.voomed)))
-setdiff(GENELIST, rownames(dat.voomed)))
+#If they don't, the plotter won't work! 
+#If you do have some extra genes, the setdiff line should give you thier names.
+length(setdiff(GENELIST, rownames(dat.voomed))) #gives number of gene names not contained in the filtered counts matrix
+setdiff(GENELIST, rownames(dat.voomed))
 #or
 length(setdiff(GENE, rownames(dat.voomed)))
-setdiff(GENE, rownames(dat.voomed)))
+setdiff(GENE, rownames(dat.voomed))
 
 #PLOT YOUR GENES---------------
 plotManyGenes(GENELIST, "TITLE_OF_PLOT")
