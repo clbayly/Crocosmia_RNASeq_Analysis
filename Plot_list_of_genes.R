@@ -10,12 +10,9 @@
 #PREPARATION--------
 #Step 1. Load packages---------
 library(edgeR)
-library(limma)
 library(ggplot2)
 library(reshape2)
 library(RColorBrewer)
-
-setwd("~/Desktop/Bohlmann_project")
 
 #Step 2. Load data matrix---------
 predat <- read.table("C_x_c_C100_gene.count.matrix_20130314",
@@ -46,18 +43,18 @@ str(dat)
 #Step 7. Remove genes in dat which have too little counts in all genes---------
 #(Making a DGElist pretty much so I can use Mac's code to trim)
 #NOTE: This removes a LOT of genes! but with such low counts across tissues, they will only add noise.
-y <- DGEList(counts=dat, group = tissue)  #this makes your data group into a DGE list. 
-z <- y[(rowSums(cpm(y) > 1) >= 3), ]      #this means: for a given gene (row), only keep rows which have at least 3 entries with >1 count. 
-z$samples$lib.size <- colSums(z$counts)   #this resets the library size (since you've now removed some rows)
-dat <- z$counts                            #this takes your data out of the DGE list (I think)
+y <- DGEList(counts=dat, group = tissue)  #This makes your data group into a DGE list. 
+z <- y[(rowSums(cpm(y) > 1) >= 3), ]      #This means: for a given gene (row), only keep rows which have at least 3 entries with >1 count. 
+z$samples$lib.size <- colSums(z$counts)   #Resets the library size (adjusting for removed rows). Possibly unnecessary for fitting with limma.
+dat <- z$counts                           #This takes your data out of the DGE list (I think)
 str(dat)
 
-#Step 8. Calculate the normalization factors for dat (adjusts proportions based on library size)
+#Step 8. Calculate the normalization factors for dat. This calculates 1 value per library, 
 norm.factor <- calcNormFactors(dat)
 
 #Step 9. Vooming dat, but for this script we only do it change from counts to logCpm values.------------
 dat.voomed <- voom(dat, lib.size = colSums(dat) * norm.factor)
-head(voom.dat$E) #this contains the expression data that gets plotted
+head(dat.voomed$E) #this contains the log2(counts) expression data that gets plotted
 
 #Step 10. plotManyGenes is a function plots multiple genes ----------
 #NOTE: For now, if you want to change the plot scale, you must alter the line:
