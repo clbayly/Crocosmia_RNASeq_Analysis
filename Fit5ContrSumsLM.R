@@ -55,27 +55,27 @@ show(modelMat.CS.corm)  #you can turn this off if you want.
 
 #VoomLimBays stolon
 dat.voomed.stol <- voom(dat, modelMat.CS.stol, plot = TRUE, lib.size = colSums(dat) * norm.factor) #this calculates more accurate variances.
-fit.CS.stol <- lmFit(dat.voomed, modelMat.CS.stol) #for each genes, this fits coefficients to observed log2(cpm) as described by design.
+fit.CS.stol <- lmFit(dat.voomed.stol, modelMat.CS.stol) #for each genes, this fits coefficients to observed log2(cpm) as described by design.
 fit.CS.stol <- eBayes(fit.CS.stol) #I will make notes later on what this does.
 
 #VoomLimBays stem
 dat.voomed.stem <- voom(dat, modelMat.CS.stem, plot = TRUE, lib.size = colSums(dat) * norm.factor)
-fit.CS.stem <- lmFit(dat.voomed, modelMat.CS.stem)
+fit.CS.stem <- lmFit(dat.voomed.stem, modelMat.CS.stem)
 fit.CS.stem <- eBayes(fit.CS.stem)
 
 #VoomLimBays leaf
 dat.voomed.leaf <- voom(dat, modelMat.CS.leaf, plot = TRUE, lib.size = colSums(dat) * norm.factor)
-fit.CS.leaf <- lmFit(dat.voomed, modelMat.CS.leaf)
+fit.CS.leaf <- lmFit(dat.voomed.leaf, modelMat.CS.leaf)
 fit.CS.leaf <- eBayes(fit.CS.leaf)
 
 #VoomLimBays flower
 dat.voomed.flow <- voom(dat, modelMat.CS.flow, plot = TRUE, lib.size = colSums(dat) * norm.factor)
-fit.CS.flow <- lmFit(dat.voomed, modelMat.CS.flow)
+fit.CS.flow <- lmFit(dat.voomed.flow, modelMat.CS.flow)
 fit.CS.flow <- eBayes(fit.CS.flow)
 
 #VoomLimBays corm
 dat.voomed.corm <- voom(dat, modelMat.CS.corm, plot = TRUE, lib.size = colSums(dat) * norm.factor)
-fit.CS.corm <- lmFit(dat.voomed, modelMat.CS.corm)
+fit.CS.corm <- lmFit(dat.voomed.corm, modelMat.CS.corm)
 fit.CS.corm <- eBayes(fit.CS.corm)
 
 #Step 3: topTabling the results---------------
@@ -88,8 +88,16 @@ ttfit.CS.flow.all <- topTable(fit.CS.flow, n = Inf)
 ttfit.CS.corm.all <- topTable(fit.CS.corm, n = Inf)
 
 #Step 4: topTabling the results minus the grand average---------------
-#This is just to see the coefficients. 
-#The F value and p values are useless, because coefficient 1 means something different from all the others.
+#The F values from these (and associated adj. P Values) will indicate the "statistically significant trendedness"
+#of the data - the extent to which gene expression behaves differently in different groups. 
+#However, this value will be biased by whatever the reference was chosen to be (in ref+tx).
+
+#recall that while F is supposed to represent 'explained differences'(ie - variation of group means from grand mean) 
+#divided by 'unexplained differences' (namely, variation of group samples from group mean)
+#in topTable, F is only the likelihood that all the groups are equal to zero. 
+#so if there is another group with a similar expression level to the reference group, with ref+tx parameterization,
+#it would contribute mostly to 'unexplained variance' (the denominator in F) wheras with contrast sums parameterization, 
+#only a sample with a mean equal to the grand mean would contribute just to 'unexplained variance'. 
 ttfit.CS.stol <- topTable(fit.CS.stol, coef = c(2,3,4,5), n = Inf)
 ttfit.CS.stem <- topTable(fit.CS.stem, coef = c(2,3,4,5), n = Inf)
 ttfit.CS.leaf <- topTable(fit.CS.leaf, coef = c(2,3,4,5), n = Inf)
