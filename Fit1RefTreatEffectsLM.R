@@ -26,8 +26,8 @@ show(modelMat.RT.corm) #so you can see that the first coef must fit all columns,
 #I currently use relevel() but there are probably better ways (see code in the constrast sums script)
 #NOTE: the row order does not change, but the level order does.
 show(tissue)
-tissue_ex <- relevel(tissue, "stolon")
-show(modelMat.RT_ex <- model.matrix(~tissue_ex)) #note that the column titles have moved, and so have the 1's representing each group.
+tissue.ex <- relevel(tissue, "stolon")
+show(modelMat.RT.ex <- model.matrix(~tissue.ex)) #note that the column titles have moved, and so have the 1's representing each group.
 
 #Step 2. Voom and Limma------------------
 dat.voomed.RT.corm <- voom(dat, modelMat.RT.corm, plot = TRUE, lib.size = colSums(dat) * norm.factor) #this calculates more accurate variances

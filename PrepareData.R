@@ -26,7 +26,7 @@ tissue <- factor(c(rep("corm", 4), rep("flower", 3,), rep("leaf", 3), rep("stem"
 str(tissue)
 
 #Step 4. Make a design matrix. It will be used by the plotting function below.-----------
-des <- as.data.frame(list(tissue = c(rep("corm", 4), rep("flower", 3,), rep("leaf", 3), rep("stem", 3), rep("stolon", 3)),
+design <- as.data.frame(list(tissue = c(rep("corm", 4), rep("flower", 3,), rep("leaf", 3), rep("stem", 3), rep("stolon", 3)),
                           sample = c("corm2", "corm3", "corm4", "corm7", "flower2", "flower4", "flower7", "leaf1", "leaf2", "leaf3", 
                                      "stem2","stem4", "stem7", "stolon2", "stolon4", "stolon7")))
 

@@ -3,7 +3,7 @@
 #This script assumes you have already prepared the following objects using PrepareData.R:
 #1. the log2cpm counts data matrix: dat
 #2. the factor: tissue
-#3. the design matrix (*Which is actually a data.frame*) containing sample information: des
+#3. the design matrix (*Which is actually a data.frame*) containing sample information: design
 #4. the numeric vector: norm.factors
 
 #it also assumes you have already loaded the packeges listed in PrepareData.R.
@@ -17,8 +17,8 @@
 #for this fit, I have selected corm.
 
 #Dummying corm
-tissue_corm  <-  factor(tissue,levels(tissue)[c(2:5,1)]) #this was 'the way better than relevel' I was talking about.
-modelMat.CS.corm <- model.matrix(~tissue_corm, contrasts = list(tissue_corm = "contr.sum"))
+tissue.corm  <-  factor(tissue,levels(tissue)[c(2:5,1)]) #this was 'the way better than relevel' I was talking about.
+modelMat.CS.corm <- model.matrix(~tissue.corm, contrasts = list(tissue_corm = "contr.sum"))
 show(modelMat.CS.corm)
 
 #To change the reference group:
@@ -26,8 +26,8 @@ show(modelMat.CS.corm)
 #I currently use relevel() but there are probably better ways (now see above!)
 #NOTE: the row order does not change, but the level order does.
 show(tissue)
-tissue_ex <- relevel(tissue, "stolon")
-show(modelMat.CS_ex <- model.matrix(~tissue_corm, contrasts = list(tissue_corm = "contr.sum")))
+tissue.ex <- relevel(tissue, "stolon")
+show(modelMat.CS.ex <- model.matrix(~tissue.ex, contrasts = list(tissue_corm = "contr.sum")))
 #note that the column titles have moved, and so have the 1's representing each group.
 
 #Step 2. Voom and Limma------------------#
