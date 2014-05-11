@@ -26,7 +26,7 @@
 #Dummying stolon
 tissue.stol <- tissue
 modelMat.CS.stol <- model.matrix(~tissue.stol, contrasts = list(tissue.stol = "contr.sum"))
-show(modelMat.CS.stem)  #you can turn this off if you want.
+show(modelMat.CS.stol)  #you can turn this off if you want.
 
 #Dummying stem
 tissue.stem <- factor(tissue,levels(tissue)[c(5,1:4)])
