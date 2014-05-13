@@ -1,20 +1,11 @@
-#Analysis of 5FitContrSumsLM.R--------------
+#F_and_t tables of 5FitContrSumsLM.R--------------
 #DESCRIPTION--------
 #in this script, I will generate numerous summary tables using the fit.CS objects.
-#There are many ways to do this analysis, so I will start by raising different questions
-#that will inspire the various analyses.
 
-#QUESTIONS TO BE ANSWERED----------
+#QUESTIONS TO BE ANSWERED:
 #First set: Grasping the data
-#1. Are the t-values and associated adj.P.Values the same between all contrast sums parameterization fits?
-#2. Are the F and associated adj.P.Values the same between all contrast sums parameterization fits?
-#3. Can TopTable's F be calculated directly from TopTable's t's?
-
-#Second set: Interpreting Data
-#1. How can we use t-values to find genes of interest? (getting gene lists ordered by extent of difference of average exp by group) - only interesing if other groups are near avg!
-#2. How can we use F-values to find genes of interest? (getting gene lists ordered by 'trendedness' - the closer more genes are to avereage (0), the less trendedness they show.)
-#3. Can we scale t such that, if only one gene is mostly responsible for a large F, t/F will be 1?
-#4. Are there any pitfalls in these approaches?
+#1. Are the t-values and associated adj.P.Values the same between all contrast sums parameterization fits? (answer: yes)
+#2. Are the F and associated adj.P.Values the same between all contrast sums parameterization fits? (answer: No)
 
 #Step_1: for each tissue, get the t values for each coefficient-----------------------------------------------
 #i. Getting all t-values and adj.P.Val 's for corm ----------------------------------------------------------
@@ -257,11 +248,11 @@ colnames(ttfit.CS.corm) <- c("flow", "leaf", "stem", "stol", "AveExpr", "F", "P.
 #ii. Prepare a table of F-values from the toptables of the five fits----------------------------------------
 #First: make mini-dataframes with F-values and rownames from each contrast sum fit.
 column <- 6 #this is for the F.value.
-ttfit.CS.stol.F <- data.frame(rownames = rownames(ttfit.CS.stol), contr.stol.F =  ttfit.CS.stol[,column])
-ttfit.CS.stem.F <- data.frame(rownames = rownames(ttfit.CS.stem), contr.stem.F = ttfit.CS.stem[,column])
-ttfit.CS.leaf.F <- data.frame(rownames = rownames(ttfit.CS.leaf), contr.leaf.F = ttfit.CS.leaf[,column])
-ttfit.CS.flow.F <- data.frame(rownames = rownames(ttfit.CS.flow), contr.flow.F = ttfit.CS.flow[,column])
-ttfit.CS.corm.F <- data.frame(rownames = rownames(ttfit.CS.corm), contr.corm.F = ttfit.CS.corm[,column])
+ttfit.CS.stol.F <- data.frame(rownames = rownames(ttfit.CS.stol), CS.stol.F =  ttfit.CS.stol[,column])
+ttfit.CS.stem.F <- data.frame(rownames = rownames(ttfit.CS.stem), CS.stem.F = ttfit.CS.stem[,column])
+ttfit.CS.leaf.F <- data.frame(rownames = rownames(ttfit.CS.leaf), CS.leaf.F = ttfit.CS.leaf[,column])
+ttfit.CS.flow.F <- data.frame(rownames = rownames(ttfit.CS.flow), CS.flow.F = ttfit.CS.flow[,column])
+ttfit.CS.corm.F <- data.frame(rownames = rownames(ttfit.CS.corm), CS.corm.F = ttfit.CS.corm[,column])
 
 #Third: merge mini-dataframes by rownames.
 ttfit.CS.all.F <- merge(ttfit.CS.stol.F, ttfit.CS.stem.F, by = "rownames")
@@ -273,11 +264,11 @@ head(ttfit.CS.all.F)
 #iii. Prepare a table of F adj.P.Val's (one column for each contrast sum fit)----------------
 #First: make mini-dataframes with F adj.P.Val's and rownames from each contrast sum fit.
 column <- 8 #this is for the F.value.
-ttfit.CS.stol.FadjP <- data.frame(rownames = rownames(ttfit.CS.stol), contr.stol.FadjP =  ttfit.CS.stol[,column])
-ttfit.CS.stem.FadjP <- data.frame(rownames = rownames(ttfit.CS.stem), contr.stem.FadjP = ttfit.CS.stem[,column])
-ttfit.CS.leaf.FadjP <- data.frame(rownames = rownames(ttfit.CS.leaf), contr.leaf.FadjP = ttfit.CS.leaf[,column])
-ttfit.CS.flow.FadjP <- data.frame(rownames = rownames(ttfit.CS.flow), contr.flow.FadjP = ttfit.CS.flow[,column])
-ttfit.CS.corm.FadjP <- data.frame(rownames = rownames(ttfit.CS.corm), contr.corm.FadjP = ttfit.CS.corm[,column])
+ttfit.CS.stol.FadjP <- data.frame(rownames = rownames(ttfit.CS.stol), CS.stol.FadjP =  ttfit.CS.stol[,column])
+ttfit.CS.stem.FadjP <- data.frame(rownames = rownames(ttfit.CS.stem), CS.stem.FadjP = ttfit.CS.stem[,column])
+ttfit.CS.leaf.FadjP <- data.frame(rownames = rownames(ttfit.CS.leaf), CS.leaf.FadjP = ttfit.CS.leaf[,column])
+ttfit.CS.flow.FadjP <- data.frame(rownames = rownames(ttfit.CS.flow), CS.flow.FadjP = ttfit.CS.flow[,column])
+ttfit.CS.corm.FadjP <- data.frame(rownames = rownames(ttfit.CS.corm), CS.corm.FadjP = ttfit.CS.corm[,column])
 
 #Second: merge mini-dataframes by rownames.
 ttfit.CS.all.FadjP <- merge(ttfit.CS.stol.FadjP, ttfit.CS.stem.FadjP, by = "rownames")
