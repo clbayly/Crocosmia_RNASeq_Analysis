@@ -24,8 +24,8 @@
 #(that is, the 5th level of 'tissue' is the 1st listed in 'tissue.stem', the 1st of 'tissue' = the 2nd in 'tissue.stem', etc...f
 
 #Reference = stolon
-tissue.stol <- tissue factor(tissue,levels(tissue)[c(5,1:4)])
-modelMat.RT.stol <- model.matrix(~tissue)
+tissue.stol <- factor(tissue,levels(tissue)[c(5,1:4)])
+modelMat.RT.stol <- model.matrix(~tissue.stol)
 show(modelMat.RT.stol)  #you can turn this off if you want.
 
 #Reference = stem
